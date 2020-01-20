@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:andtoid="http://schemas.android.com/aapt">
+    <item>
+        <bitmap
+            andtoid:gravity="center"
+            android:src="@drawable/intro_logo"/>
+    </item>
+</layer-list>
