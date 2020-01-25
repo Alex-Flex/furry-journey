@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "853604710233",
+    "firebase_url": "https://fir-messaging-example-f9d4a.firebaseio.com",
+    "project_id": "fir-messaging-example-f9d4a",
+    "storage_bucket": "fir-messaging-example-f9d4a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:853604710233:android:eb0af1faa0a5444afa3e48",
+        "android_client_info": {
+          "package_name": "com.alexflex.experiments.messengerexample"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "853604710233-iav49u0jtosqbemjqqncp79lpqqnp3h5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexflex.experiments.messengerexample",
+            "certificate_hash": "11fa0c93e9f0a1a5e16f0042141df5fc2f8eba16"
+          }
+        },
+        {
+          "client_id": "853604710233-1lmb9hm83qvtcvktpp97lvvoad52e9o9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCDjJdHvgyCnYgB7PQJCOOw9cy9_bO3hJE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "853604710233-1lmb9hm83qvtcvktpp97lvvoad52e9o9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

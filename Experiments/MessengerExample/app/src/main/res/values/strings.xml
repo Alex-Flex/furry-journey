@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Chat Example</string>
+    <string name="title_activity_dialog_list">DialogList</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="write_smth">Напиши что-нибудь</string>
+    <string name="default_notification_channel_id">MyMessageChannel</string>
+
+    <string name="you_are_authorized">Вы авторизованы</string>
+    <string name="you_are_not_authorized">Вы не авторизованы</string>
+</resources>
