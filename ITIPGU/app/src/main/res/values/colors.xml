@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#1800FF</color>
+    <color name="colorAccent">#00F7FF</color>
+
+    <color name="colorSpring1">#1AA800</color>
+    <color name="colorSpring2">#1FD800</color>
+    <color name="colorSpring3">#6AFF52</color>
+
+    <color name="Summer1">#0FA800</color>
+    <color name="Summer2">#098D00</color>
+    <color name="Summer3">#0FCC00</color>
+
+    <color name="Autumn1">#FFAB00</color>
+    <color name="Autumn2">#FF6D00</color>
+    <color name="Autumn3">#FFD600</color>
+
+    <color name="night1">#242424</color>
+    <color name="night_lighter">#303030</color>
+    <color name="night_accent">#707070</color>
+
+    <color name="light_text">#FFFFFF</color>
+    <color name="dark_text">#000000</color>
+    <color name="grey">#2B2B2B</color>
+
+    <color name="bubble_mine">#00B6A0</color>
+    <color name="bubble_not_mine">#1DA000</color>
+</resources>

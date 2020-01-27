@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "73871862068",
+    "firebase_url": "https://iti-itk-pgu.firebaseio.com",
+    "project_id": "iti-itk-pgu",
+    "storage_bucket": "iti-itk-pgu.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:73871862068:android:1b32eefb8dc500ce119d61",
+        "android_client_info": {
+          "package_name": "com.alexflex.soft.itipgu"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "73871862068-0mbeb33h7tfaermj4je6a03slpg0gti9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alexflex.soft.itipgu",
+            "certificate_hash": "11fa0c93e9f0a1a5e16f0042141df5fc2f8eba16"
+          }
+        },
+        {
+          "client_id": "73871862068-lm7cn6d4tfpviag7h13c5pcdk2eqpa0p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMFoWJq3M2KOP4qWYAmjQWiGJ8VAY4FME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "73871862068-lm7cn6d4tfpviag7h13c5pcdk2eqpa0p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

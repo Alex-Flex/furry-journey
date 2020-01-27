@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group
+        android:id="@+id/main_things"
+        android:checkableBehavior="single"
+        android:title="@string/other_stuff">
+        <item
+            android:id="@+id/news"
+            android:icon="@drawable/ic_menu_send"
+            android:title="@string/news" />
+        <item
+            android:id="@+id/messaging"
+            android:icon="@drawable/messages"
+            android:title="@string/messaging" />
+    </group>
+
+    <item
+        android:id="@+id/other"
+        android:title="@string/other_stuff">
+
+        <menu>
+            <group>
+                <item
+                    android:icon="@android:drawable/ic_menu_preferences"
+                    android:title="@string/settings"
+                    android:id="@+id/settings"/>
+                <item
+                    android:id="@+id/about_app_item"
+                    android:icon="@android:drawable/ic_dialog_info"
+                    android:title="@string/about_app" />
+            </group>
+        </menu>
+    </item>
+
+</menu>
