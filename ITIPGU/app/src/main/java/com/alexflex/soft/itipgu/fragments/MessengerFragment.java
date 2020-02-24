@@ -69,11 +69,13 @@ public class MessengerFragment extends Fragment {
         msgsLayout = fragmentView.findViewById(R.id.messages_list);
         message = fragmentView.findViewById(R.id.message);
         sender = fragmentView.findViewById(R.id.send_button);
+        LinearLayout input = fragmentView.findViewById(R.id.input);
 
         if (CommonMethods.isNightHere()) {
             msgsLayout.setBackgroundColor(Color.BLACK);
             message.setTextColor(Color.WHITE);
             sender.setBackgroundColor(getResources().getColor(R.color.night_accent));
+            input.setBackgroundColor(R.color.night_accent);
         }
 
         msgsLayout.setDivider(null);

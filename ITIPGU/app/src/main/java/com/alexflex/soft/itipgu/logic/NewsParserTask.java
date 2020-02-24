@@ -1,10 +1,16 @@
 package com.alexflex.soft.itipgu.logic;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.alexflex.soft.itipgu.R;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -39,7 +45,7 @@ public class NewsParserTask extends AsyncTask<Void, Void, Void> {
             //Если задание отменено, то не выполняем ничего
             if(isCancelled()) return null;
 
-            Document document = Jsoup.connect("http://tehnikum.ucoz.ru/").get();
+            Document document = Jsoup.connect(CommonMethods.urlITK).get();
 
             //приступаем к выбору элементов
             Elements msgs = document.getElementsByClass("Message");
@@ -80,11 +86,25 @@ public class NewsParserTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void result){
-        mainView.removeAllViews();
-        RecyclerView recyclerView = new RecyclerView(context);
-        LinearLayoutManager manager = new LinearLayoutManager(context);
-        recyclerView.setLayoutManager(manager);
-        recyclerView.setAdapter(new RecyclerAdapter(context, messages));
-        mainView.addView(recyclerView);
+        if (messages.size() == 0) {
+            TextView tw = new TextView(context);
+            tw.setText(R.string.no_server);
+            tw.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 15);
+            tw.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT));
+            if (CommonMethods.isNightHere()) {
+                tw.setTextColor(Color.WHITE);
+            } else {
+                tw.setTextColor(Color.BLACK);
+            }
+            tw.setGravity(Gravity.CENTER);
+            mainView.addView(tw);
+        } else {
+            RecyclerView recyclerView = new RecyclerView(context);
+            LinearLayoutManager manager = new LinearLayoutManager(context);
+            recyclerView.setLayoutManager(manager);
+            recyclerView.setAdapter(new RecyclerAdapter(context, messages));
+            mainView.addView(recyclerView);
+        }
     }
 }

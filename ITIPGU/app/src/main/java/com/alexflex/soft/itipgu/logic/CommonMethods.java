@@ -19,13 +19,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-
 import com.alexflex.soft.itipgu.R;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -34,6 +31,11 @@ import java.util.Date;
 import java.util.List;
 
 public class CommonMethods {
+
+    public static final String urlITK = "http://tehnikum.ucoz.ru/";
+    public static final String urlITI = "http://iti.spsu.ru/";
+    public static final String CHANNEL_ID = "id";
+    public static final String CHANNEL_NAME = "name";
 
     //сейчас вечернее время?
     public static boolean isNightHere(){

@@ -4,6 +4,9 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +14,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +25,8 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.alexflex.soft.itipgu.logic.CommonMethods;
+
+import static android.os.Build.VERSION_CODES.O;
 
 //настройки приложения
 public class SettingsActivity extends AppCompatActivity {
@@ -57,6 +63,29 @@ public class SettingsActivity extends AppCompatActivity {
 
         if(!(notifySwitcher.isChecked()))
             moreParams.setVisibility(View.GONE);
+
+        //тестовое уведомление
+        findViewById(R.id.test_notif).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Notification.Builder builder;
+                if(Build.VERSION.SDK_INT >= O) {
+                    int importance = NotificationManager.IMPORTANCE_LOW;
+                    NotificationChannel notificationChannel = new NotificationChannel("i", "name", importance);
+                    notificationChannel.enableLights(true);
+                    notificationChannel.setLightColor(Color.RED);
+                    notificationChannel.enableVibration(true);
+                    ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(notificationChannel);
+                    builder = new Notification.Builder(getApplicationContext(), "i");
+                } else
+                    builder = new Notification.Builder(getApplicationContext());
+                builder.setSmallIcon(R.drawable.ic_warning_black_24dp)
+                        .setContentTitle("Test")
+                        .setContentText("test");
+                ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                        .notify(1, builder.build());
+            }
+        });
 
         //переключатель уведомлений
         notifySwitcher.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

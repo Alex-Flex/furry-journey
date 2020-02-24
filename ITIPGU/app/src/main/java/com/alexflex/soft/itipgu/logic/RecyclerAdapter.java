@@ -19,12 +19,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.mViewH
     private LayoutInflater layoutInflater;
     private ArrayList<Message> messages;
     private final String INTENT_EXTRA_NAME = "link";
-    private Context context;
 
     RecyclerAdapter(Context context, ArrayList<Message> messages) {
         layoutInflater = LayoutInflater.from(context);
         this.messages = messages;
-        this.context = context;
     }
 
     @Override

@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.IBinder;
 import android.widget.Toast;
 import com.alexflex.soft.itipgu.logic.CommonMethods;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -24,7 +23,6 @@ import static android.os.Build.VERSION_CODES.O;
 public class NewsGetterService extends Service {
 
     private long interval;
-    private final String URL = "http://tehnikum.ucoz.ru/";
     private final String ACTIVITY_NAME = "SettingsActivity";
     private final String INTERVAL_IN_MINUTES = "update_time";
     private final String LAST_HEADING = "last_heading";
@@ -48,6 +46,90 @@ public class NewsGetterService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int start){
+        performGetting();
+        return START_STICKY;
+    }
+
+    @Override
+    public void onDestroy(){
+        getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putBoolean(NOTIFICATIONS_ENABLED, false).apply();
+        getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putInt(problemWasShown, 1).apply();
+        task.interrupt();
+        manager.cancelAll();
+        stopSelf();
+    }
+
+    //строим уведомление для показа
+    public Notification getNotification(String heading, String textWhenNotExpanded, String textWhenExpanded){
+        Notification.Builder builder;
+        if(Build.VERSION.SDK_INT >= O) {
+            notificationChannel = new NotificationChannel(CommonMethods.CHANNEL_ID,
+                    CommonMethods.CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_DEFAULT);
+            notificationChannel.enableLights(true);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), new AudioAttributes.Builder()
+                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
+                    .build());
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE))
+                    .createNotificationChannel(notificationChannel);
+            builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID);
+            builder.setChannelId(CommonMethods.CHANNEL_ID);
+        } else {
+            builder = new Notification.Builder(getApplicationContext());
+            builder.setDefaults(Notification.DEFAULT_ALL);
+        }
+
+        builder.setSmallIcon(R.drawable.notify)
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.iti))
+                .setAutoCancel(true)
+                .setContentIntent(PendingIntent.getActivity(this, 1,
+                        new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
+                .setContentTitle(heading)
+                .setContentText(textWhenNotExpanded)
+                .setStyle(new Notification.BigTextStyle().bigText(textWhenExpanded))
+                .setColor(Color.CYAN);
+
+        return builder.build();
+    }
+
+    //обновляем новости
+    public void refreshNews(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Document document = Jsoup.connect(CommonMethods.urlITK).get();
+                    Elements titles = document.getElementsByClass("eTitle");
+                    Elements texts = document.getElementsByClass("Message");
+                    newsText = texts.get(0).text();
+                    newHeading = titles.get(0).text();
+                } catch (IOException ignored) {}
+            }
+        }).start();
+    }
+
+    public void firstLaunch(){
+        lastHeading = getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).getString(LAST_HEADING, null);
+        if(lastHeading != null){
+            getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putString(LAST_HEADING, lastHeading).apply();
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Document document = Jsoup.connect(CommonMethods.urlITK).get();
+                        Elements titles = document.getElementsByClass("eTitle");
+                        lastHeading = titles.get(0).text();
+                        getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putString(LAST_HEADING, lastHeading).apply();
+                    } catch (IOException ignored) { }
+                }
+            }).start();
+        }
+    }
+
+    private void performGetting(){
         if(!CommonMethods.isOnline(this)){
             Toast.makeText(this, R.string.no_internet, Toast.LENGTH_LONG).show();
         }
@@ -93,84 +175,5 @@ public class NewsGetterService extends Service {
             task = new Thread(refreshing);
             task.start();
         } catch (InterruptedException ignored) {}
-
-        return START_STICKY;
-    }
-
-    @Override
-    public void onDestroy(){
-        getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putBoolean(NOTIFICATIONS_ENABLED, false).apply();
-        getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putInt(problemWasShown, 1).apply();
-        task.interrupt();
-        manager.cancelAll();
-        stopSelf();
-    }
-
-    //строим уведомление для показа
-    public Notification getNotification(String heading, String textWhenNotExpanded, String textWhenExpanded){
-        Notification.Builder builder;
-        if(Build.VERSION.SDK_INT >= O)
-            builder = new Notification.Builder(getApplicationContext(), CHANNEL_ID);
-        else
-            builder = new Notification.Builder(getApplicationContext());
-
-        builder.setSmallIcon(R.drawable.notify)
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.iti))
-                .setAutoCancel(true)
-                .setContentIntent(PendingIntent.getActivity(this, 1,
-                        new Intent(this, MainActivity.class), PendingIntent.FLAG_UPDATE_CURRENT))
-                .setContentTitle(heading)
-                .setContentText(textWhenNotExpanded)
-                .setStyle(new Notification.BigTextStyle().bigText(textWhenExpanded))
-                .setColor(Color.CYAN);
-
-        if(Build.VERSION.SDK_INT >= O) {
-            notificationChannel = new NotificationChannel("id", "name", NotificationManager.IMPORTANCE_DEFAULT);
-            builder.setChannelId("id");
-            notificationChannel.enableLights(true);
-            notificationChannel.enableVibration(true);
-            notificationChannel.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION), new AudioAttributes.Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE)
-                    .build());
-        } else {
-            builder.setDefaults(Notification.DEFAULT_ALL);
-        }
-        return builder.build();
-    }
-
-    //обновляем новости
-    public void refreshNews(){
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Document document = Jsoup.connect(URL).get();
-                    Elements titles = document.getElementsByClass("eTitle");
-                    Elements texts = document.getElementsByClass("Message");
-                    newsText = texts.get(0).text();
-                    newHeading = titles.get(0).text();
-                } catch (IOException ignored) {}
-            }
-        }).start();
-    }
-
-    public void firstLaunch(){
-        lastHeading = getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).getString(LAST_HEADING, null);
-        if(lastHeading != null){
-            getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putString(LAST_HEADING, lastHeading).apply();
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        Document document = Jsoup.connect(URL).get();
-                        Elements titles = document.getElementsByClass("eTitle");
-                        lastHeading = titles.get(0).text();
-                        getApplicationContext().getSharedPreferences(ACTIVITY_NAME, MODE_PRIVATE).edit().putString(LAST_HEADING, lastHeading).apply();
-                    } catch (IOException ignored) { }
-                }
-            }).start();
-        }
     }
 }
